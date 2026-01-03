@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./routes/authRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js";
+import chapterRoutes from "./routes/chapterRoutes.js";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ mongoose
 
 app.use("/api/auth", authRoutes);
 app.use("/api/stories", storyRoutes);
+app.use("/api/chapters", chapterRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

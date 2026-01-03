@@ -73,12 +73,20 @@ const Navbar = () => {
 
         {/* USER */}
         {role === "user" && (
-          <Link
-            to="/profile"
-            className="flex items-center gap-1 hover:text-blue-600"
-          >
-            <FaUserCircle /> Profile
-          </Link>
+          <>
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-1 hover:text-blue-600"
+            >
+              <FaUserCircle /> Dash
+            </Link>
+            <Link
+              to="/profile"
+              className="flex items-center gap-1 hover:text-blue-600 ml-2"
+            >
+              Profile
+            </Link>
+          </>
         )}
 
         {/* LOGOUT (ADMIN + USER) */}

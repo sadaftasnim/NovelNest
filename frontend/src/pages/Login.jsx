@@ -48,7 +48,12 @@ const Login = () => {
       // ✅ UPDATE CONTEXT (NO REFRESH)
       login(data.role);
 
-      navigate("/");
+      // Redirect based on role
+      if (data.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError("Login failed");
     }

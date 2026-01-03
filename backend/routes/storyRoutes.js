@@ -1,17 +1,20 @@
 import express from "express";
-import Story from "../models/Story.js";
+import {
+  getStories,
+  getStoryById,
+  createStory,
+  updateStory,
+  deleteStory,
+} from "../controllers/storyController.js";
+import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-// Create story
-router.post("/", async (req, res) => {
-  try {
-    const story = new Story(req.body);
-    await story.save();
-    res.status(201).json(story);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.route("/").get(getStories).post(protect, admin, createStory);
+router
+  .route("/:id")
+  .get(getStoryById)
+  .put(protect, admin, updateStory)
+  .delete(protect, admin, deleteStory);
 
-export default router;   
+export default router;

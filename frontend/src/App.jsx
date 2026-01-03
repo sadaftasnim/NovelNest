@@ -5,8 +5,9 @@ import Footer from "./utils/Footer";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import Profile from "./pages/Profile";
 import Library from "./pages/Library";
+import Profile from "./pages/Profile";
+import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -18,7 +19,9 @@ function App() {
   const hideFooter =
     location.pathname === "/login" ||
     location.pathname === "/signup" ||
-    location.pathname === "/library";
+    location.pathname === "/library" ||
+    location.pathname.startsWith("/admin") ||
+    location.pathname === "/dashboard";
 
   return (
     <>
@@ -31,7 +34,17 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
 
-        {/* USER PROFILE (Protected) */}
+        {/* USER DASHBOARD (Protected) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* USER PROFILE (Still exists but redirects to dashboard if empty) */}
         <Route
           path="/profile"
           element={
