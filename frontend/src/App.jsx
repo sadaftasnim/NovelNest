@@ -9,6 +9,8 @@ import Library from "./pages/Library";
 import Profile from "./pages/Profile";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import NovelDetails from "./pages/NovelDetails";
+import ChapterReader from "./pages/ChapterReader";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -54,7 +56,6 @@ function App() {
           }
         />
 
-        {/* ADMIN DASHBOARD (Protected) */}
         <Route
           path="/admin/dashboard"
           element={
@@ -63,6 +64,10 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Story Reading Routes */}
+        <Route path="/novel/:id" element={<NovelDetails />} />
+        <Route path="/novel/:storyId/chapter/:chapterNumber" element={<ChapterReader />} />
       </Routes>
 
       {/* Footer hidden only on login/signup/library */}

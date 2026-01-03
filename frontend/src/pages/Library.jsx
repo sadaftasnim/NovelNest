@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Genres
 const genres = [
@@ -309,6 +310,7 @@ const novelsData = {
 };
 
 const Library = () => {
+  const navigate = useNavigate();
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [realStories, setRealStories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -479,7 +481,9 @@ const Library = () => {
                           </span>
                         </div>
                       </div>
-                      <button className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-lg shadow-blue-100 transition-all">
+                      <button
+                        onClick={() => navigate(`/novel/${novel.id}`)}
+                        className="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-lg shadow-blue-100 transition-all">
                         Read Now
                       </button>
                     </div>
