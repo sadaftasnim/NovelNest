@@ -7,6 +7,7 @@ import {
   FaUserShield,
   FaSignOutAlt,
   FaUserCircle,
+  FaUserAlt,
 } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -21,25 +22,24 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-400 px-6 py-10 flex items-center justify-between">
-
+    <nav className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-white/10 px-8 py-9 flex items-center justify-between shadow-2xl">
       {/* Logo */}
-      <h1 className="text-4xl font-bold text-black">
-        NovelNest 📚✍️
-      </h1>
+          <Link to="/" className="text-4xl  text-slate-200 font-bold flex items-center">
+            NovelNest 📚✍️
+          </Link>
 
       {/* Search */}
-      <div className="flex items-center bg-white rounded-full px-4 py-2 w-1/3">
+      <div className="flex items-center bg-white/10 border border-white/20 rounded-2xl px-5 py-2 w-1/3 group focus-within:bg-white/20 transition-all">
         <input
           type="text"
           placeholder="Search novels..."
-          className="outline-none w-full text-lg font-medium"
+          className="bg-transparent outline-none w-full text-white placeholder-slate-400 font-medium"
         />
         <FaSearch className="text-blue-500" />
       </div>
 
       {/* Menu */}
-      <div className="flex gap-6 items-center text-black text-lg">
+      <div className="flex gap-8 items-center text-slate-200 font-bold">
 
         <Link to="/" className="flex items-center gap-1 hover:text-blue-600">
           <FaHome /> Home
@@ -67,7 +67,7 @@ const Navbar = () => {
             to="/admin/dashboard"
             className="flex items-center gap-1 hover:text-blue-600"
           >
-            <FaUserShield /> Admin Dashboard
+            <FaUserShield /> AdminDashboard
           </Link>
         )}
 
@@ -78,12 +78,13 @@ const Navbar = () => {
               to="/dashboard"
               className="flex items-center gap-1 hover:text-blue-600"
             >
-              <FaUserCircle /> Dash
+              <FaUserCircle /> UserDashboard
             </Link>
             <Link
               to="/profile"
               className="flex items-center gap-1 hover:text-blue-600 ml-2"
             >
+              <FaUserAlt />   
               Profile
             </Link>
           </>

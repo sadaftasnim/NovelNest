@@ -191,7 +191,7 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <aside className="w-72 bg-white border-r border-gray-100 flex flex-col min-h-screen">
+      <aside className="w-72 bg-white border-r border-gray-100 flex flex-col sticky top-[100px] h-[calc(100vh-100px)] overflow-y-auto">
         <div className="p-8 border-b  bg-gray-200 border-gray-50 ">
           <h2 className="text-2xl font-black text-blue-600 tracking-tight uppercase">Nest Admin</h2>
         </div>
@@ -245,13 +245,13 @@ const AdminDashboard = () => {
             <div className={`grid gap-10 ${dashboardView === 'overview' ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 max-w-5xl mx-auto w-full'}`}>
               {/* Create/Edit Story */}
               {dashboardView === 'overview' && (
-                <div className="lg:col-span-4 bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-gray-100 h-fit">
+                <div className="lg:col-span-4 bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-gray-100 h-[750px] flex flex-col">
                   <h2 className="text-2xl font-black mb-8 text-slate-800 flex items-center gap-3">
                     <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
                     {editingId ? "Edit Story" : "New Story"}
                   </h2>
 
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-4 flex-1 overflow-y-auto pr-2">
                     <input
                       name="title"
                       value={formData.title}
@@ -300,7 +300,7 @@ const AdminDashboard = () => {
                       onChange={handleChange}
                       placeholder="Synopsis"
                       rows="4"
-                      className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                      className="w-full p-8 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
                       required
                     />
 
@@ -311,7 +311,7 @@ const AdminDashboard = () => {
                           name="genre"
                           value={formData.genre}
                           onChange={handleChange}
-                          className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                          className="w-full p-6 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
                         >
                           <option>Fantasy</option>
                           <option>Action</option>
@@ -333,7 +333,7 @@ const AdminDashboard = () => {
                           name="status"
                           value={formData.status}
                           onChange={handleChange}
-                          className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                          className="w-full p-6 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
                         >
                           <option>Ongoing</option>
                           <option>Completed</option>
@@ -344,7 +344,7 @@ const AdminDashboard = () => {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1"
                     >
                       {loading ? "Saving..." : editingId ? "Update Story" : "Publish Story"}
                     </button>
@@ -361,8 +361,8 @@ const AdminDashboard = () => {
                 </div>
               )}
 
-              {/* Manage Stories */}
-              <div className={`${dashboardView === 'overview' ? 'lg:col-span-8' : 'w-full'} bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-gray-100`}>
+              {/* Manage Stories Section */}
+              <div className={`${dashboardView === 'overview' ? 'lg:col-span-8' : 'w-full'} bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-gray-100 h-[750px] flex flex-col`}>
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3">
                     <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
@@ -371,7 +371,7 @@ const AdminDashboard = () => {
                   <button onClick={fetchStories} className="text-blue-600 font-bold hover:underline bg-blue-50 px-4 py-2 rounded-xl transition-all">Refresh List</button>
                 </div>
 
-                <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
+                <div className="space-y-6 flex-1 overflow-y-auto pr-2">
                   {stories.map((story) => (
                     <div key={story._id} className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-blue-100 transition-all">
                       <div className="flex gap-6 items-center">

@@ -28,24 +28,20 @@ const UserDashboard = () => {
     return (
         <div className="min-h-screen bg-gray-50 flex">
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-md flex flex-col">
+            <aside className=" w-64 bg-white shadow-md flex flex-col sticky top-[100px] h-[calc(100vh-100px)] overflow-y-auto">
                 <div className="p-6 border-b">
-                    <h2 className="text-2xl font-bold text-blue-600">NovelNest</h2>
+                    <h2 className="text-2xl font-bold text-blue-600">User Dashboard</h2>
                 </div>
-                <nav className="flex-1 p-4 space-y-2">
+                <nav className="flex-1 p-4 space-y-6">
                     <Link to="/dashboard" className="block px-4 py-2 text-blue-700 bg-blue-100 rounded-lg font-medium">
                         Dashboard
                     </Link>
-                    <Link to="/library" className="block px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <Link to="/library" className="block px-4 py-2 text-blue-700  bg-blue-100 font-medium hover:bg-gray-100 rounded-lg">
                         Explore Library
                     </Link>
-                    <Link to="/profile" className="block px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">
-                        My Profile
-                    </Link>
+                 
                 </nav>
-                <div className="p-4 border-t">
-                    <LogoutButton />
-                </div>
+               
             </aside>
 
             {/* Main Content */}
@@ -63,10 +59,7 @@ const UserDashboard = () => {
                 </header>
 
                 <section className="mb-12">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-gray-800">Available Novels</h2>
-                        <Link to="/library" className="text-blue-500 hover:underline font-medium">View Library</Link>
-                    </div>
+                 
 
                     {loading ? (
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
