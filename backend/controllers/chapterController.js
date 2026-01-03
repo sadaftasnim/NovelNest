@@ -23,7 +23,10 @@ export const addChapter = async (req, res) => {
 
         const savedChapter = await chapter.save();
 
-        // Increment chaptersCount in Story
+        // Sync chapters array and count
+        if (story.chapters && !story.chapters.includes(savedChapter._id)) {
+            story.chapters.push(savedChapter._id);
+        }
         story.chaptersCount = await Chapter.countDocuments({ storyId });
         await story.save();
 
@@ -80,9 +83,12 @@ export const deleteChapter = async (req, res) => {
             const storyId = chapter.storyId;
             await chapter.deleteOne();
 
-            // Update chaptersCount in Story
+            // Update chapters array and count in Story
             const story = await Story.findById(storyId);
             if (story) {
+                if (story.chapters) {
+                    story.chapters = story.chapters.filter(id => id.toString() !== req.params.id);
+                }
                 story.chaptersCount = await Chapter.countDocuments({ storyId });
                 await story.save();
             }

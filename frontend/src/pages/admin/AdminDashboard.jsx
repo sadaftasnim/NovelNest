@@ -24,6 +24,7 @@ const AdminDashboard = () => {
     chapterNumber: 1,
   });
   const [editingChapterId, setEditingChapterId] = useState(null);
+  const [dashboardView, setDashboardView] = useState("overview"); // 'overview' or 'manage'
 
   useEffect(() => {
     fetchStories();
@@ -190,162 +191,184 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col">
-        <div className="p-6 border-b border-slate-800">
-          <h2 className="text-2xl font-bold text-blue-400">Nest Admin</h2>
+      <aside className="w-72 bg-white border-r border-gray-100 flex flex-col min-h-screen">
+        <div className="p-8 border-b  bg-gray-200 border-gray-50 ">
+          <h2 className="text-2xl font-black text-blue-600 tracking-tight uppercase">Nest Admin</h2>
         </div>
-        <nav className="flex-1 p-4 space-y-2">
-          <Link to="/admin/dashboard" className="block px-4 py-2 bg-slate-800 rounded-lg font-medium">
+
+        <nav className="flex-1 p-6 space-y-3">
+          <button
+            onClick={() => { setDashboardView("overview"); setSelectedStory(null); }}
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${dashboardView === 'overview' && !selectedStory ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'text-slate-500 hover:bg-slate-50 hover:text-blue-600'}`}
+          >
             Overview
-          </Link>
-          <button onClick={() => setSelectedStory(null)} className="w-full text-left px-4 py-2 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+          </button>
+
+          <button
+            onClick={() => { setDashboardView("manage"); setSelectedStory(null); }}
+            className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${dashboardView === 'manage' && !selectedStory ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'text-slate-500 hover:bg-slate-50 hover:text-blue-600'}`}
+          >
             Manage Stories
           </button>
-          <Link to="/library" className="block px-4 py-2 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+
+          <Link to="/library" className="w-full flex items-center gap-4 px-5 py-4 text-slate-500 hover:bg-slate-50 hover:text-blue-600 rounded-2xl font-bold transition-all">
             View Site
           </Link>
         </nav>
-        <div className="p-4 border-t border-slate-800">
+
+        <div className="p-8 border-t border-gray-50">
           <LogoutButton />
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 p-12 bg-gray-50">
         {!selectedStory ? (
           <>
-            <header className="flex justify-between items-center mb-10">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
               <div>
-                <h1 className="text-4xl font-extrabold text-slate-800">Admin Control Center</h1>
-                <p className="text-slate-500 mt-2">Manage your stories and monitor platform activity.</p>
+                <h1 className="text-4xl font-black text-slate-800 tracking-tight">
+                  {dashboardView === 'overview' ? 'Admin Overview' : 'Manage Stories'}
+                </h1>
+                <p className="text-slate-500 mt-2 text-lg font-medium">
+                  {dashboardView === 'overview' ? 'Monitor platform activity and add new stories.' : 'Review and edit your story catalog.'}
+                </p>
               </div>
               <div className="flex gap-4">
-                <div className="bg-white p-4 rounded-xl shadow-sm border flex flex-col items-end">
-                  <span className="text-xs text-slate-400 uppercase font-bold">Total Stories</span>
-                  <span className="text-2xl font-black text-slate-800">{stories.length}</span>
+                <div className="bg-white p-5 px-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                  <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total Stories</span>
+                  <span className="text-3xl font-black text-blue-600">{stories.length}</span>
                 </div>
               </div>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className={`grid gap-10 ${dashboardView === 'overview' ? 'grid-cols-1 lg:grid-cols-12' : 'grid-cols-1 max-w-5xl mx-auto w-full'}`}>
               {/* Create/Edit Story */}
-              <div className="lg:col-span-1 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
-                <h2 className="text-2xl font-bold mb-6 text-slate-800">{editingId ? "Edit Story" : "Add New Story"}</h2>
+              {dashboardView === 'overview' && (
+                <div className="lg:col-span-4 bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-gray-100 h-fit">
+                  <h2 className="text-2xl font-black mb-8 text-slate-800 flex items-center gap-3">
+                    <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
+                    {editingId ? "Edit Story" : "New Story"}
+                  </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <input
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    type="text"
-                    placeholder="Story Title"
-                    className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-
-                  <input
-                    name="author"
-                    value={formData.author}
-                    onChange={handleChange}
-                    type="text"
-                    placeholder="Author Name"
-                    className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-
-                  <div className="relative">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     <input
-                      name="image"
-                      value={formData.image}
+                      name="title"
+                      value={formData.title}
                       onChange={handleChange}
                       type="text"
-                      placeholder="Image Name (e.g. Garden.jpg) or URL"
+                      placeholder="Story Title"
                       className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                      required
                     />
-                    {formData.image && (
-                      <div className="mt-2 flex items-center gap-3 p-2 bg-blue-50 rounded-lg border border-blue-100">
-                        <img
-                          src={formData.image.startsWith('http') || formData.image.startsWith('/') ? formData.image : `/images/${formData.image}`}
-                          className="w-12 h-16 object-cover rounded shadow-sm"
-                          alt="Preview"
-                          onError={(e) => e.target.src = "https://via.placeholder.com/48x64?text=X"}
-                        />
-                        <span className="text-xs font-semibold text-blue-600">Image Preview</span>
+
+                    <input
+                      name="author"
+                      value={formData.author}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="Author Name"
+                      className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+
+                    <div className="relative">
+                      <input
+                        name="image"
+                        value={formData.image}
+                        onChange={handleChange}
+                        type="text"
+                        placeholder="Image Name (e.g. Garden.jpg) or URL"
+                        className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                      />
+                      {formData.image && (
+                        <div className="mt-2 flex items-center gap-3 p-2 bg-blue-50 rounded-lg border border-blue-100">
+                          <img
+                            src={formData.image.startsWith('http') || formData.image.startsWith('/') ? formData.image : `/images/${formData.image}`}
+                            className="w-12 h-16 object-cover rounded shadow-sm"
+                            alt="Preview"
+                            onError={(e) => e.target.src = "https://via.placeholder.com/48x64?text=X"}
+                          />
+                          <span className="text-xs font-semibold text-blue-600">Image Preview</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      placeholder="Synopsis"
+                      rows="4"
+                      className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-500 mb-2 uppercase ml-1">Genre</h3>
+                        <select
+                          name="genre"
+                          value={formData.genre}
+                          onChange={handleChange}
+                          className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option>Fantasy</option>
+                          <option>Action</option>
+                          <option>Comedy</option>
+                          <option>Adventure</option>
+                          <option>Mystery</option>
+                          <option>Romance</option>
+                          <option>Horror</option>
+                          <option>Sci_Fi</option>
+                          <option>Drama</option>
+                          <option>Thriller</option>
+                          <option>Historical</option>
+                          <option>General Fiction</option>
+                        </select>
                       </div>
-                    )}
-                  </div>
-
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Synopsis"
-                    rows="4"
-                    className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-500 mb-2 uppercase ml-1">Genre</h3>
-                      <select
-                        name="genre"
-                        value={formData.genre}
-                        onChange={handleChange}
-                        className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option>Fantasy</option>
-                        <option>Action</option>
-                        <option>Comedy</option>
-                        <option>Adventure</option>
-                        <option>Mystery</option>
-                        <option>Romance</option>
-                        <option>Horror</option>
-                        <option>Sci_Fi</option>
-                        <option>Drama</option>
-                        <option>Thriller</option>
-                        <option>Historical</option>
-                        <option>General Fiction</option>
-                      </select>
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-500 mb-2 uppercase ml-1">Status</h3>
+                        <select
+                          name="status"
+                          value={formData.status}
+                          onChange={handleChange}
+                          className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option>Ongoing</option>
+                          <option>Completed</option>
+                        </select>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-slate-500 mb-2 uppercase ml-1">Status</h3>
-                      <select
-                        name="status"
-                        value={formData.status}
-                        onChange={handleChange}
-                        className="w-full p-4 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option>Ongoing</option>
-                        <option>Completed</option>
-                      </select>
-                    </div>
-                  </div>
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1"
-                  >
-                    {loading ? "Saving..." : editingId ? "Update Story" : "Publish Story"}
-                  </button>
-                  {editingId && (
                     <button
-                      type="button"
-                      onClick={() => { setEditingId(null); setFormData({ title: "", author: "", description: "", genre: "Fantasy", status: "Ongoing", image: "" }); }}
-                      className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-4 rounded-xl font-bold transition-all"
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all transform hover:-translate-y-1"
                     >
-                      Cancel Edit
+                      {loading ? "Saving..." : editingId ? "Update Story" : "Publish Story"}
                     </button>
-                  )}
-                </form>
-              </div>
+                    {editingId && (
+                      <button
+                        type="button"
+                        onClick={() => { setEditingId(null); setFormData({ title: "", author: "", description: "", genre: "Fantasy", status: "Ongoing", image: "" }); }}
+                        className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-4 rounded-xl font-bold transition-all"
+                      >
+                        Cancel Edit
+                      </button>
+                    )}
+                  </form>
+                </div>
+              )}
 
               {/* Manage Stories */}
-              <div className="lg:col-span-2 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+              <div className={`${dashboardView === 'overview' ? 'lg:col-span-8' : 'w-full'} bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-gray-100`}>
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-2xl font-bold text-slate-800">Platform Stories</h2>
-                  <button onClick={fetchStories} className="text-blue-600 font-semibold hover:underline">Refresh List</button>
+                  <h2 className="text-2xl font-black text-slate-800 flex items-center gap-3">
+                    <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
+                    Platform Stories
+                  </h2>
+                  <button onClick={fetchStories} className="text-blue-600 font-bold hover:underline bg-blue-50 px-4 py-2 rounded-xl transition-all">Refresh List</button>
                 </div>
 
                 <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
@@ -366,7 +389,7 @@ const AdminDashboard = () => {
                           <div className="flex gap-2 mt-3">
                             <span className="px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-700 rounded-full">{story.genre}</span>
                             <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-wider bg-gray-100 text-slate-600 rounded-full`}>
-                              {story.chaptersCount || 0} Chapters
+                              {(story.chapters?.length || story.chaptersCount || 0)} Chapters
                             </span>
                           </div>
                         </div>
